@@ -2,3 +2,7 @@
 __pycache__/eve_up.cpython-39.pyc
 .env
 nornir.log
+working/__pycache__/__init__.cpython-38.pyc
+working/__pycache__/eve_up.cpython-38.pyc
+working/__pycache__/set_ints.cpython-38.pyc
+nornir.log

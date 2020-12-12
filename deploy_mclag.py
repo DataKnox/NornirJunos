@@ -14,12 +14,13 @@ junos_devices = nr.filter(F(node_type="PE"))
 def lacp_config(task):
     data = task.host.data
     if data['mc_lag']:
-        print(data)
+        # print(data)
         chassis_response = task.run(name='lacp chassis config', task=pyez_config, template_path='/mnt/c/NornirJunos/mc-lag.j2',
                                     template_vars=data, data_format='xml')
-        diff = task.run(task=pyez_diff, name='int diff')
+        if chassis_response:
+            diff = task.run(task=pyez_diff, name='int diff')
         if diff:
-            commit = task.run(task=pyez_commit, name='int commit')
+            task.run(task=pyez_commit, name='int commit')
 
 
 send_result = junos_devices.run(

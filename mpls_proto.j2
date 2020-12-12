@@ -1,0 +1,43 @@
+<configuration>
+    <protocols>
+        <rsvp>
+            {% for intf in isis_int -%}
+            <interface>
+                <name>{{intf}}</name>
+                <authentication-key>{{lsp['auth_key']}}</authentication-key>
+            </interface>
+            {% endfor %}
+        </rsvp>
+        <mpls>
+            {% for group in admin_groups -%}
+            <admin-groups>
+                <name>{{ group['name'] }}</name>
+                <group-value>{{ group['value'] }}</group-value>
+            </admin-groups>
+            {% endfor %}
+            {% if lsp['paths'] -%}
+                {% for path in lsp['paths'] -%}
+                <label-switched-path>
+                    <name>{{ lsp['paths'][path].name }}</name>
+                    <to>{{ lsp['paths'][path].to }}</to>
+                    <bandwidth>
+                        <per-traffic-class-bandwidth>{{ lsp['paths'][path].bandwidth_res }}</per-traffic-class-bandwidth>
+                    </bandwidth>
+                    <oam>
+                        <bfd-liveness-detection>
+                            <minimum-interval>{{ lsp['paths'][path].bfd_int }}</minimum-interval>
+                            <multiplier>{{ lsp['paths'][path].bfd_mult }}</multiplier>
+                        </bfd-liveness-detection>
+                    </oam>
+                    <most-fill/>
+                </label-switched-path>
+                {% endfor %}
+            {% endif %}
+            {% for intf in isis_int -%}
+            <interface>
+                <name>{{ intf }}</name>
+            </interface>
+            {% endfor %}
+        </mpls>
+    </protocols>
+</configuration>
